@@ -30,6 +30,28 @@ public class patient extends javax.swing.JFrame {
     public patient() {
         initComponents(); 
     }
+//    private void AutoId(){
+//         Connection conn= null;
+//            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
+//            ResultSet rs;
+//            
+//            Statement s = conn.prepareStatement(null);
+//            rs = s.executeQuery("select MAX(patientNo) from patient");
+//            rs.next();
+//            rs.getString("MAX(patientNo)");
+//            if(rs.getString("MAX(patientNo)")==null){
+//                jLabel5.setText("PS001");
+//            }
+//            else
+//            {
+//                long id = Long.parseLong(rs.getString("MAX(patientNo)").substring(2,rs.getString("MAX(patientNo)").length()));
+//                id++;
+//                jLabel5.setText("PS"+String.format("%03d", id));
+//            }
+//            
+//           
+//        
+//    }
     
   
     
@@ -184,6 +206,11 @@ public class patient extends javax.swing.JFrame {
         jButton3.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         jButton3.setForeground(new java.awt.Color(153, 0, 0));
         jButton3.setText("DELETE");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setBackground(new java.awt.Color(0, 0, 0));
         jButton4.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
@@ -397,6 +424,41 @@ public class patient extends javax.swing.JFrame {
         this.setVisible(false);
         new main().setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        
+                try {
+            String pno = txtpatientno.getText();
+
+            Connection conn= null;
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
+            PreparedStatement pst;
+            pst = conn.prepareStatement("delete from patient where  patientNo = ?");
+           
+           
+
+            pst.setString(1, pno);
+            pst.executeUpdate();
+            
+            JOptionPane.showMessageDialog(this, "patient deleteddd!!!");
+            
+            
+            
+          txtpatientno.setText("");
+          txtpatientname.setText("");
+          txtphone.setText("");
+          txtaddress.setText("");
+          jButton1.setVisible(true);
+          
+          jButton1.setEnabled(true);
+          
+           
+        } catch (SQLException ex) {
+            Logger.getLogger(patient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
