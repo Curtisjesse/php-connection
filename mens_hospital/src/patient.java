@@ -29,29 +29,92 @@ public class patient extends javax.swing.JFrame {
      */
     public patient() {
         initComponents(); 
+        Connect();
+        AutoId();
+        patient_table();
+        
     }
-//    private void AutoId(){
+    
+        Connection conn;
+        PreparedStatement pst;
+        ResultSet rs;
+    
+    public void Connect()
+          {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+             
+             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(Channel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+          }
+      public void patient_table()
+        {
+            
+        try {
+              ResultSet rs;
+            pst = conn.prepareStatement("select * from patient");
+            rs= pst.executeQuery();
+            ResultSetMetaData rsm = rs.getMetaData();
+            int c;
+            c = rsm.getColumnCount();
+            DefaultTableModel dtm = (DefaultTableModel)jTable1.getModel();
+             dtm.setRowCount(0);
+             
+             while(rs.next()){
+                 
+                 Vector v2 = new Vector();
+                 
+                 for(int i = 1; i<=c;i++){
+                     v2.add(rs.getString("patientNo"));
+                     v2.add(rs.getString("patientName"));
+                     v2.add(rs.getString("phone"));
+                     v2.add(rs.getString("address"));
+                     
+                 }
+                 dtm.addRow(v2 );
+             }
+        } catch (SQLException ex) {
+            Logger.getLogger(Doctor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+           
+            
+        }
+    
+    
+    private void AutoId(){
 //         Connection conn= null;
-//            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
-//            ResultSet rs;
-//            
-//            Statement s = conn.prepareStatement(null);
-//            rs = s.executeQuery("select MAX(patientNo) from patient");
-//            rs.next();
-//            rs.getString("MAX(patientNo)");
-//            if(rs.getString("MAX(patientNo)")==null){
-//                jLabel5.setText("PS001");
-//            }
-//            else
-//            {
-//                long id = Long.parseLong(rs.getString("MAX(patientNo)").substring(2,rs.getString("MAX(patientNo)").length()));
-//                id++;
-//                jLabel5.setText("PS"+String.format("%03d", id));
-//            }
-//            
-//           
-//        
-//    }
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn;
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
+            ResultSet rs;
+            Statement s;
+            s = conn.createStatement();
+            rs = s.executeQuery("select MAX(patientNo) from patient");
+            rs.next();
+            rs.getString("MAX(patientNo)");
+            if(rs.getString("MAX(patientNo)")==null){
+                labpatientno.setText("PS001");
+            }
+            else
+            {
+                long id = Long.parseLong(rs.getString("MAX(patientNo)").substring(2,rs.getString("MAX(patientNo)").length()));
+                id++;
+                labpatientno.setText("PS"+String.format("%03d", id));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(patient.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(patient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+            
+           
+        
+    }
     
   
     
@@ -76,7 +139,7 @@ public class patient extends javax.swing.JFrame {
         txtphone = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtaddress = new javax.swing.JTextArea();
-        txtpatientno = new javax.swing.JTextField();
+        labpatientno = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -113,6 +176,8 @@ public class patient extends javax.swing.JFrame {
         txtaddress.setRows(5);
         jScrollPane1.setViewportView(txtaddress);
 
+        labpatientno.setText("jLabel5");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -130,16 +195,16 @@ public class patient extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(txtpatientname, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
                         .addComponent(txtphone, javax.swing.GroupLayout.Alignment.LEADING))
-                    .addComponent(txtpatientno, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(labpatientno, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(42, 42, 42)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
-                    .addComponent(txtpatientno))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labpatientno, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(35, 35, 35)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtpatientname)
@@ -291,29 +356,7 @@ public class patient extends javax.swing.JFrame {
         try {
             // TODO add your handling code here:
              
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn= null;
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
-//            ResultSet rs;
-//            
-//            Statement s = conn.prepareStatement(null);
-//            rs = s.executeQuery("select MAX(patientNo) from patient");
-//            rs.next();
-//            rs.getString("MAX(patientNo)");
-//            if(rs.getString("MAX(patientNo)")==null){
-//                labpatientno.setText("PS001");
-//            }
-//            else
-//            {
-//                long id = Long.parseLong(rs.getString("MAX(patientNo)").substring(2,rs.getString("MAX(patientNo)").length()));
-//                id++;
-//                labpatientno.setText("PS"+String.format("%03d", id));
-//            }
-            
-           
-
-           // pst = conn.prepareStatement("insert into patient(patientNo,patientName,phone,address)values(?,?,?,?");
-            String pno = txtpatientno.getText();
+            String pno = labpatientno.getText();
             String pname = txtpatientname.getText();
             String pphone = txtphone.getText();
             String paddress = txtaddress.getText();
@@ -329,37 +372,14 @@ public class patient extends javax.swing.JFrame {
             
             
             
-          txtpatientno.setText("");
+      
+            AutoId();
           txtpatientname.setText("");
           txtphone.setText("");
           txtaddress.setText("");
-          txtpatientno.requestFocus(); 
-            
-            ResultSet rs;
-            pst = conn.prepareStatement("select * from patient");
-            rs= pst.executeQuery();
-            ResultSetMetaData rsm = rs.getMetaData();
-            int c;
-            c = rsm.getColumnCount();
-            DefaultTableModel dtm = (DefaultTableModel)jTable1.getModel();
-             dtm.setRowCount(0);
-             
-             while(rs.next()){
-                 
-                 Vector v2 = new Vector();
-                 
-                 for(int i = 1; i<=c;i++){
-                     v2.add(rs.getString("patientNo"));
-                     v2.add(rs.getString("patientName"));
-                     v2.add(rs.getString("phone"));
-                     v2.add(rs.getString("address"));
-                     
-                 }
-                 dtm.addRow(v2 );
-             }
-            
-
-        } catch (ClassNotFoundException | SQLException ex) {
+          txtpatientname.requestFocus(); 
+         patient_table();
+        } catch (SQLException ex) {
             Logger.getLogger(patient.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -371,7 +391,7 @@ public class patient extends javax.swing.JFrame {
         DefaultTableModel dt = (DefaultTableModel)jTable1.getModel();
         int SelectIndex = jTable1.getSelectedRow();
         
-        txtpatientno.setText(dt.getValueAt(SelectIndex, 0).toString());
+        labpatientno.setText(dt.getValueAt(SelectIndex, 0).toString());
         txtpatientname.setText(dt.getValueAt(SelectIndex, 1).toString());
         txtphone.setText(dt.getValueAt(SelectIndex, 2).toString());
         txtaddress.setText(dt.getValueAt(SelectIndex, 3).toString());  
@@ -384,33 +404,38 @@ public class patient extends javax.swing.JFrame {
         // TODO add your handling code here:
             
         try {
-            String pno = txtpatientno.getText();
+            
             String pname = txtpatientname.getText();
             String pphone = txtphone.getText();
             String paddress = txtaddress.getText();
-            Connection conn= null;
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
-            PreparedStatement pst;
+            String pno = labpatientno.getText();
+            
+//            Connection conn= null;
+//            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
+//            PreparedStatement pst;
             pst = conn.prepareStatement("update patient set  patientName = ?, phone = ?, address = ? where  patientNo = ?");
            
            
             pst.setString(1  , pname);
             pst.setString(2, pphone);
             pst.setString(3, paddress);
-             pst.setString(4, pno);
+            pst.setString(4, pno);
+            
             pst.executeUpdate();
             
             JOptionPane.showMessageDialog(this, "patient updateddd!!!");
             
             
             
-          txtpatientno.setText("");
+         // labpatientno.setText("");
+            AutoId();
           txtpatientname.setText("");
           txtphone.setText("");
           txtaddress.setText("");
           jButton1.setVisible(true);
           
           jButton1.setEnabled(true);
+          patient_table();
           
            
         } catch (SQLException ex) {
@@ -429,15 +454,10 @@ public class patient extends javax.swing.JFrame {
         // TODO add your handling code here:
         
                 try {
-            String pno = txtpatientno.getText();
-
-            Connection conn= null;
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
-            PreparedStatement pst;
+                    
+            String pno = labpatientno.getText();
+            
             pst = conn.prepareStatement("delete from patient where  patientNo = ?");
-           
-           
-
             pst.setString(1, pno);
             pst.executeUpdate();
             
@@ -445,13 +465,14 @@ public class patient extends javax.swing.JFrame {
             
             
             
-          txtpatientno.setText("");
+          AutoId();
           txtpatientname.setText("");
           txtphone.setText("");
           txtaddress.setText("");
           jButton1.setVisible(true);
           
           jButton1.setEnabled(true);
+          patient_table();
           
            
         } catch (SQLException ex) {
@@ -510,9 +531,9 @@ public class patient extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField3;
+    private javax.swing.JLabel labpatientno;
     private javax.swing.JTextArea txtaddress;
     private javax.swing.JTextField txtpatientname;
-    private javax.swing.JTextField txtpatientno;
     private javax.swing.JTextField txtphone;
     // End of variables declaration//GEN-END:variables
 }

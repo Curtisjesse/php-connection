@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,12 +29,98 @@ public class Doctor extends javax.swing.JFrame {
      */
     public Doctor() {
         initComponents();
+        Connect();
+        AutoId();
+        doctor_table();
     }
     
     
-    int idd;
-    String utype;
-    int newid;
+        int idd;
+        String utype;
+        int newid;
+    
+        Connection conn;
+        PreparedStatement pst;
+        ResultSet rs;
+        
+        
+        public void doctor_table()
+        {
+            
+        try {
+            ResultSet rs;
+            pst = conn.prepareStatement("select * from doctor where log_id = ?");
+             pst.setInt(1, newid);
+            rs= pst.executeQuery();
+            ResultSetMetaData rsm = rs.getMetaData();
+            int c;
+            c = rsm.getColumnCount();
+            DefaultTableModel dtm = (DefaultTableModel)jTable1.getModel();
+             dtm.setRowCount(0);
+             
+             while(rs.next()){
+                 
+                 Vector v2 = new Vector();
+                 
+                 for(int i = 1; i<=c;i++){
+                     v2.add(rs.getString("doctorno"));
+                     v2.add(rs.getString("doctorname"));
+                     v2.add(rs.getString("specialization"));
+                     v2.add(rs.getString("qualification"));
+                     v2.add(rs.getString("channelfee"));
+                     v2.add(rs.getString("phone"));
+                     v2.add(rs.getString("roomno"));
+                     
+                 }
+                 dtm.addRow(v2 );
+             }
+        } catch (SQLException ex) {
+            Logger.getLogger(Doctor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+           
+            
+        }
+    
+    public void Connect()
+          {
+             try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+             
+                 conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
+                   } catch (ClassNotFoundException | SQLException ex) {
+                   Logger.getLogger(Channel.class.getName()).log(Level.SEVERE, null, ex);
+                   }
+            
+          }
+    
+    
+    public void AutoId(){
+        try {
+            
+            ResultSet rs;
+            Statement s;
+            s = conn.createStatement();
+            rs = s.executeQuery("select MAX(doctorno) from doctor");
+            rs.next();
+            rs.getString("MAX(doctorno)");
+            if(rs.getString("MAX(doctorno)")==null){
+                labdoctorno.setText("D001");
+            }
+            else
+            {
+                long id = Long.parseLong(rs.getString("MAX(doctorno)").substring(2,rs.getString("MAX(doctorno)").length()));
+                id++;
+                labdoctorno.setText("D"+String.format("%03d", id));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(patient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+            
+           
+        
+    }
+    
     public Doctor(int idd,String utype) {
         initComponents();
         
@@ -63,7 +150,6 @@ public class Doctor extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        txtdoctorno = new javax.swing.JTextField();
         txtdoctorname = new javax.swing.JTextField();
         txtspecialization = new javax.swing.JTextField();
         txtqualification = new javax.swing.JTextField();
@@ -72,6 +158,7 @@ public class Doctor extends javax.swing.JFrame {
         spnroomno = new javax.swing.JSpinner();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        labdoctorno = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -120,12 +207,6 @@ public class Doctor extends javax.swing.JFrame {
         jLabel7.setForeground(new java.awt.Color(255, 255, 51));
         jLabel7.setText("Room No");
 
-        txtdoctorno.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtdoctornoActionPerformed(evt);
-            }
-        });
-
         txtspecialization.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtspecializationActionPerformed(evt);
@@ -155,6 +236,8 @@ public class Doctor extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTable1);
 
+        labdoctorno.setText("jLabel9");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -172,12 +255,12 @@ public class Doctor extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(spnroomno, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtphone)
+                    .addComponent(txtphone, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
                     .addComponent(txtchannelfee)
                     .addComponent(txtspecialization)
                     .addComponent(txtdoctorname)
-                    .addComponent(txtdoctorno, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
-                    .addComponent(txtqualification))
+                    .addComponent(txtqualification)
+                    .addComponent(labdoctorno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 81, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 637, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -186,10 +269,12 @@ public class Doctor extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(34, 34, 34)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(txtdoctorno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(labdoctorno, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtdoctorname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -321,20 +406,14 @@ public class Doctor extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtspecializationActionPerformed
 
-    private void txtdoctornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtdoctornoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtdoctornoActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
          try {
             // TODO add your handling code here:
              
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn= null;
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
+            
       
-            String dno = txtdoctorno.getText();
+            String dno = labdoctorno.getText();
             String dname = txtdoctorname.getText();
             String specialization = txtspecialization.getText();
             String qualification = txtqualification.getText();
@@ -358,7 +437,8 @@ public class Doctor extends javax.swing.JFrame {
             
             
             
-          txtdoctorno.setText("");
+          //labdoctorno.setText("");
+            AutoId();
           txtdoctorname.setText("");
           txtspecialization.setText("");
           txtqualification.setText("");
@@ -367,37 +447,12 @@ public class Doctor extends javax.swing.JFrame {
           spnroomno.setValue(0);
           
          // txtaddress.setText("");
-          txtdoctorno.requestFocus(); 
+          txtdoctorname.requestFocus(); 
+          doctor_table();
             
-            ResultSet rs;
-            pst = conn.prepareStatement("select * from doctor where log_id = ?");
-            pst.setInt(1, newid);
-            rs= pst.executeQuery();
-            ResultSetMetaData rsm = rs.getMetaData();
-            int c;
-            c = rsm.getColumnCount();
-            DefaultTableModel dtm = (DefaultTableModel)jTable1.getModel();
-             dtm.setRowCount(0);
-             
-             while(rs.next()){
-                 
-                 Vector v2 = new Vector();
-                 
-                 for(int i = 1; i<=c;i++){
-                     v2.add(rs.getString("doctorno"));
-                     v2.add(rs.getString("doctorname"));
-                     v2.add(rs.getString("specialization"));
-                     v2.add(rs.getString("qualification"));
-                     v2.add(rs.getString("channelfee"));
-                     v2.add(rs.getString("phone"));
-                     v2.add(rs.getString("roomno"));
-                     
-                 }
-                 dtm.addRow(v2 );
-             }
             
 
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(patient.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -408,7 +463,7 @@ public class Doctor extends javax.swing.JFrame {
         DefaultTableModel dt = (DefaultTableModel)jTable1.getModel();
         int SelectIndex = jTable1.getSelectedRow();
         
-        txtdoctorno.setText(dt.getValueAt(SelectIndex, 0).toString());
+       labdoctorno.setText(dt.getValueAt(SelectIndex, 0).toString());
         txtdoctorname.setText(dt.getValueAt(SelectIndex, 1).toString());
         txtspecialization.setText(dt.getValueAt(SelectIndex, 2).toString());
         txtqualification.setText(dt.getValueAt(SelectIndex, 3).toString());
@@ -423,17 +478,15 @@ public class Doctor extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         try {
-            String dno = txtdoctorno.getText();
+            
             String dname = txtdoctorname.getText();
             String specialization = txtspecialization.getText();
             String qualification = txtqualification.getText();
             String channelfee = txtchannelfee.getText();
             String phone = txtphone.getText();
             String room = spnroomno.getValue().toString();
-            //String paddress = txtaddress.getText();
-            Connection conn= null;
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
-            PreparedStatement pst;
+            String dno = labdoctorno.getText();
+            
             pst = conn.prepareStatement("update doctor set  doctorname = ?, specialization = ?, qualification = ?, channelfee = ?, phone = ?, roomno = ? where  doctorno = ?");
            
            
@@ -451,7 +504,7 @@ public class Doctor extends javax.swing.JFrame {
             
             
             
-          txtdoctorno.setText("");
+          AutoId();
           txtdoctorname.setText("");
           txtspecialization.setText("");
           txtqualification.setText("");
@@ -462,6 +515,7 @@ public class Doctor extends javax.swing.JFrame {
           jButton1.setVisible(true);
           
           jButton1.setEnabled(true);
+          doctor_table();
           
            
         } catch (SQLException ex) {
@@ -472,7 +526,7 @@ public class Doctor extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
               try {
-            String dno = txtdoctorno.getText();
+            String dno = labdoctorno.getText();
 
             Connection conn= null;
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
@@ -488,7 +542,7 @@ public class Doctor extends javax.swing.JFrame {
             
             
             
-          txtdoctorno.setText("");
+          AutoId();
           txtdoctorname.setText("");
           txtspecialization.setText("");
           txtqualification.setText("");
@@ -499,6 +553,7 @@ public class Doctor extends javax.swing.JFrame {
           jButton1.setVisible(true);
           
           jButton1.setEnabled(true);
+          doctor_table();
           
            
         } catch (SQLException ex) {
@@ -565,10 +620,10 @@ public class Doctor extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JLabel labdoctorno;
     private javax.swing.JSpinner spnroomno;
     private javax.swing.JTextField txtchannelfee;
     private javax.swing.JTextField txtdoctorname;
-    private javax.swing.JTextField txtdoctorno;
     private javax.swing.JTextField txtphone;
     private javax.swing.JTextField txtqualification;
     private javax.swing.JTextField txtspecialization;

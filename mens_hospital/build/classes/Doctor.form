@@ -124,12 +124,12 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="spnroomno" min="-2" pref="86" max="-2" attributes="0"/>
-                          <Component id="txtphone" max="32767" attributes="0"/>
+                          <Component id="txtphone" pref="162" max="32767" attributes="0"/>
                           <Component id="txtchannelfee" max="32767" attributes="0"/>
                           <Component id="txtspecialization" max="32767" attributes="0"/>
                           <Component id="txtdoctorname" max="32767" attributes="0"/>
-                          <Component id="txtdoctorno" pref="162" max="32767" attributes="0"/>
                           <Component id="txtqualification" max="32767" attributes="0"/>
+                          <Component id="labdoctorno" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace pref="81" max="32767" attributes="0"/>
                       <Component id="jScrollPane1" min="-2" pref="637" max="-2" attributes="0"/>
@@ -141,11 +141,14 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtdoctorno" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                              <Component id="labdoctorno" min="-2" pref="29" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="txtdoctorname" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -283,11 +286,6 @@
                 <Property name="text" type="java.lang.String" value="Room No"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtdoctorno">
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtdoctornoActionPerformed"/>
-              </Events>
-            </Component>
             <Component class="javax.swing.JTextField" name="txtdoctorname">
             </Component>
             <Component class="javax.swing.JTextField" name="txtspecialization">
@@ -372,6 +370,11 @@
                 </Component>
               </SubComponents>
             </Container>
+            <Component class="javax.swing.JLabel" name="labdoctorno">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="jLabel9"/>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
         <Component class="javax.swing.JLabel" name="jLabel8">
