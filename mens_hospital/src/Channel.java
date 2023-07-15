@@ -438,8 +438,8 @@ public class Channel extends javax.swing.JFrame {
             PreparedStatement pst;
             pst = conn.prepareStatement("insert into channel(channelno,doctorname,patientname,roomno,date)values(?,?,?,?,?)");
             pst.setString(1, chno);
-            pst.setString(2, d.name);
-            pst.setString(3, p.name);
+            pst.setString(2, d.id);
+            pst.setString(3, p.id);
             pst.setString(4, room);
             pst.setString(5, date);
             
@@ -506,9 +506,11 @@ public class Channel extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(patient.class.getName()).log(Level.SEVERE, null, ex);
         }
+     }
     }//GEN-LAST:event_jButton2ActionPerformed
 
 
+    
     private void jTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MousePressed
         // TODO add your handling code here:
         int rowIndex = jTable1.getSelectedRow();

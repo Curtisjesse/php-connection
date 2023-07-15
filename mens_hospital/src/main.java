@@ -135,6 +135,11 @@ public class main extends javax.swing.JFrame {
 
         jButton8.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jButton8.setText("View Channel");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         jButton9.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jButton9.setText("Log Out");
@@ -284,11 +289,11 @@ public class main extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         
-//        if(uctype.equals("Doctor")){
-//            new Doctor(idd,uctype).setVisible(true);
-//        }
-        Doctor d = new Doctor();
-        d.setVisible(true);
+        if(uctype.equals("Doctor")){
+            new Doctor(idd,uctype).setVisible(true);
+        }
+//        Doctor d = new Doctor();
+//        d.setVisible(true);
         
         
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -298,6 +303,12 @@ public class main extends javax.swing.JFrame {
         Channel ch = new Channel();
         ch.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+        new view_channel(idd).setVisible(true);
+        
+    }//GEN-LAST:event_jButton8ActionPerformed
 
     /**
      * @param args the command line arguments

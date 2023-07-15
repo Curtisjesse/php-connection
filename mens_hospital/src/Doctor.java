@@ -35,6 +35,7 @@ public class Doctor extends javax.swing.JFrame {
     }
     
     
+    
         int idd;
         String utype;
         int newid;
@@ -42,6 +43,7 @@ public class Doctor extends javax.swing.JFrame {
         Connection conn;
         PreparedStatement pst;
         ResultSet rs;
+        
         
         
         public void doctor_table()
@@ -121,16 +123,7 @@ public class Doctor extends javax.swing.JFrame {
         
     }
     
-    public Doctor(int idd,String utype) {
-        initComponents();
-        
-        this.idd = idd;
-        this.utype = utype;
-        newid = idd;
-        
-        JOptionPane.showMessageDialog(this, newid);
-        
-    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
