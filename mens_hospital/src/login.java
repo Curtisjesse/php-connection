@@ -177,9 +177,9 @@ public class login extends javax.swing.JFrame {
              
             rs=pst.executeQuery();
             if(rs.next()){
-                int userId = rs.getInt("id");
+                int userid = rs.getInt("id");
                 this.setVisible(false);
-                new main(userId,username,usertype).setVisible(true);
+                new main(userid,username,usertype).setVisible(true);
             }
             else{
                 JOptionPane.showMessageDialog(this, "username or password not correct!!!");

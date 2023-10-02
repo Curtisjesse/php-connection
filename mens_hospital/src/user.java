@@ -27,20 +27,23 @@ public class user extends javax.swing.JFrame {
     public user() {
        // this.conn = null;
         initComponents();
+        Connect();
     }
-//    Connection conn=null;
-//    PreparedStatement pst;
-//    
-//    
-//    public void connect(){
-//        try {
-//            Class.forName("com.mysql.jdbc.Driver");
-//            conn = DriverManager.getConnection("jdbc:mysql://localhost/hospital","root"," ");
-//        } catch (ClassNotFoundException | SQLException ex) {
-//            Logger.getLogger(user.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
+    Connection conn=null;
+   PreparedStatement pst;
     
+    
+   public void Connect()
+          {
+             try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+             
+                 conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
+                   } catch (ClassNotFoundException | SQLException ex) {
+                   Logger.getLogger(Channel.class.getName()).log(Level.SEVERE, null, ex);
+                   }
+            
+          }
     
     
 
@@ -200,57 +203,28 @@ public class user extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         
-//        String name = txtname.getText();
-//        String username = txtusername.getText();
-//        String password = txtpassword.getText();
-//        String usertype = txtusertype.getSelectedItem().toString();
-//        
-//        try {
-//            pst = conn.prepareStatement("insert into user(name,username,password,usertype)values(?,?,?,?)");
-//            pst.setString(1, name);
-//            pst.setString(2, username);
-//            pst.setString(3, password);
-//            pst.setString(4, usertype);
-//            conn.close();
-//            
-//            pst.executeUpdate();
-//            JOptionPane.showMessageDialog(this, "User Added!!!!!!!");
-//            
-//            
-//        } catch (SQLException ex) {
-//            Logger.getLogger(user.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-        
+        String name = txtname.getText();
+        String username = txtusername.getText();
+        String password = txtpassword.getText();
+        String usertype = txtusertype.getSelectedItem().toString();
         
         try {
-            
-            String name = txtname.getText();
-            String username = txtusername.getText();
-            String password = txtpassword.getText();
-            String usertype = txtusertype.getSelectedItem().toString();
-            
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
-            PreparedStatement pst = conn.prepareStatement("insert into user(name,username,password,usertype)values(?,?,?,?)");
-            
+            pst = conn.prepareStatement("insert into user(name,username,password,usertype)values(?,?,?,?)");
             pst.setString(1, name);
-             pst.setString(2, username);
+            pst.setString(2, username);
             pst.setString(3, password);
             pst.setString(4, usertype);
+            //conn.close();
+            
             pst.executeUpdate();
-            
-            JOptionPane.showMessageDialog(this, "User Added!!!!!!!"); 
-            
-            txtname.setText("");
-            txtusername.setText("");
-            txtpassword.setText("");
-            txtusertype.setSelectedIndex(-1);
-            txtname.requestFocus();
+            JOptionPane.showMessageDialog(this, "User Added!!!!!!!");
             
             
-        } catch (ClassNotFoundException | SQLException | HeadlessException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(user.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+  
         
     }//GEN-LAST:event_jButton1ActionPerformed
 

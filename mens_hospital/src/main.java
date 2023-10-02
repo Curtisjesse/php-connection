@@ -61,6 +61,7 @@ public class main extends javax.swing.JFrame {
         }
           
     }
+     
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -292,6 +293,7 @@ public class main extends javax.swing.JFrame {
         if(uctype.equals("Doctor")){
             new Doctor(idd,uctype).setVisible(true);
         }
+        
 //        Doctor d = new Doctor();
 //        d.setVisible(true);
         

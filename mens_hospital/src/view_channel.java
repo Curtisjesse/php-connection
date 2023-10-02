@@ -71,7 +71,7 @@ public class view_channel extends javax.swing.JFrame {
             c = rsm.getColumnCount();
             DefaultTableModel dtm = (DefaultTableModel)jTable1.getModel();
              dtm.setRowCount(0);
-             
+                
              while(rs.next()){
                  
                  Vector v2 = new Vector();

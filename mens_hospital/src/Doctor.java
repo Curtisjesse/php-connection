@@ -27,18 +27,25 @@ public class Doctor extends javax.swing.JFrame {
     /**
      * Creates new form doctors
      */
-    public Doctor() {
+
+    
+    
+    
+        int id;
+        String uctype;
+        int newid;
+        
+        public Doctor(int id, String utype ) {
         initComponents();
+        
+        this.id=id;
+        this.uctype=utype;
+        newid = id;
+        JOptionPane.showMessageDialog(this, newid);
         Connect();
         AutoId();
         doctor_table();
-    }
-    
-    
-    
-        int idd;
-        String utype;
-        int newid;
+    } 
     
         Connection conn;
         PreparedStatement pst;
@@ -122,7 +129,7 @@ public class Doctor extends javax.swing.JFrame {
            
         
     }
-    
+
 
 
     /**
