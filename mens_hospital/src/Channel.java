@@ -164,6 +164,7 @@ public class Channel extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        exit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -300,6 +301,16 @@ public class Channel extends javax.swing.JFrame {
             }
         });
 
+        exit.setBackground(new java.awt.Color(51, 0, 153));
+        exit.setFont(new java.awt.Font("Tahoma", 3, 18)); // NOI18N
+        exit.setForeground(new java.awt.Color(255, 0, 0));
+        exit.setText("EXIT");
+        exit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -312,14 +323,16 @@ public class Channel extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(19, 19, 19)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 570, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(259, 259, 259)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(51, 51, 51)
-                        .addComponent(jButton2)))
-                .addContainerGap(19, Short.MAX_VALUE))
+                        .addComponent(jButton2)
+                        .addGap(79, 79, 79)
+                        .addComponent(exit, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -333,7 +346,8 @@ public class Channel extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(exit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -387,39 +401,66 @@ public class Channel extends javax.swing.JFrame {
         }
         }    
         
-    
-         public final void AutoId()
-         {
-             try {
-                    Class.forName("com.mysql.cj.jdbc.Driver");
-                     Connection conn;
-                    conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
-                    ResultSet rs;
-                    Statement s;
-                    s = conn.createStatement();
-                    rs = s.executeQuery("select MAX(channelno) from channel");
-                    rs.next();
-                    rs.getString("MAX(channelno)");
-
-                    if(rs.getString("MAX(channelno)")==null){
-                        labchannelno.setText("CH001");
-                    }
-                    else
-                    {
-                        long id = Long.parseLong(rs.getString("MAX(channelno)").substring(2,rs.getString("MAX(channelno)").length()));
-                        id++;
-                        labchannelno.setText("CH"+String.format("%03d", id));
-                    }
-                } catch (SQLException | ClassNotFoundException ex) {
-                    Logger.getLogger(Channel.class.getName()).log(Level.SEVERE, null, ex);
-                }
+//    
+//         public  void AutoId()
+//         {
+//             try {
+//                    Class.forName("com.mysql.cj.jdbc.Driver");
+//                     Connection conn;
+//                    conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
+//                    ResultSet rs;
+//                    Statement s;
+//                    s = conn.createStatement();
+//                    rs = s.executeQuery("select MAX(channelno) from channel");
+//                    rs.next();
+//                    rs.getString("MAX(channelno)");
+//
+//                    if(rs.getString("MAX(channelno)")==null){
+//                        labchannelno.setText("CH001");
+//                    }
+//                    else
+//                    {
+//                        long id = Long.parseLong(rs.getString("MAX(channelno)").substring(2,rs.getString("MAX(channelno)").length()));
+//                        id++;
+//                        labchannelno.setText("CH"+String.format("%03d", id));
+//                    }
+//                } catch (SQLException | ClassNotFoundException ex) {
+//                    Logger.getLogger(Channel.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//    }
+        public void AutoId(){
+        try {
+            
+            ResultSet rs;
+            Statement s;
+            s = conn.createStatement();
+            rs = s.executeQuery("select MAX(channelno) from channel");
+            rs.next();
+            rs.getString("MAX(channelno)");
+            if(rs.getString("MAX(channelno)")==null){
+                labchannelno.setText("CH001");
+            }
+            else
+            {
+                long id = Long.parseLong(rs.getString("MAX(channelno)").substring(2,rs.getString("MAX(channelno)").length()));
+                id++;
+                labchannelno.setText("CH"+String.format("%03d", id));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(patient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+            
+           
+        
     }
     
+        
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         
-        
+            AutoId();
             String chno = labchannelno.getText();
             Doctor d = (Doctor)txtdoctorname.getSelectedItem();
             Patient p = (Patient)txtpatientname.getSelectedItem();
@@ -519,6 +560,11 @@ public class Channel extends javax.swing.JFrame {
     DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     model.removeRow(rowIndex);
     }//GEN-LAST:event_jTable1MousePressed
+
+    private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
+        this.setVisible(false);
+        new login().setVisible(true);        // TODO add your handling code here:
+    }//GEN-LAST:event_exitActionPerformed
     
   
 
@@ -558,6 +604,7 @@ public class Channel extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton exit;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;

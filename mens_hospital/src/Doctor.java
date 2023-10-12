@@ -598,7 +598,7 @@ public class Doctor extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Doctor().setVisible(true);
+                //new Doctor().setVisible(true);
             }
         });
     }
