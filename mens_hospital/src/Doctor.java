@@ -31,12 +31,11 @@ public class Doctor extends javax.swing.JFrame {
     
     
     
-        int id;
-        String uctype;
-        int newid;
+      
         
         public Doctor(int id, String utype ) {
         initComponents();
+        
         
         this.id=id;
         this.uctype=utype;
@@ -46,10 +45,15 @@ public class Doctor extends javax.swing.JFrame {
         AutoId();
         doctor_table();
     } 
+        int id;
+        String uctype;
+        int newid;
     
         Connection conn;
         PreparedStatement pst;
         ResultSet rs;
+
+  
         
         
         
@@ -598,7 +602,7 @@ public class Doctor extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                //new Doctor().setVisible(true);
+                //new Doctor(1,).setVisible(true);
             }
         });
     }
