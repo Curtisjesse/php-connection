@@ -1,3 +1,14 @@
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -15,8 +26,75 @@ public class prescription extends javax.swing.JFrame {
      */
     public prescription() {
         initComponents();
+    
+        Connect();
     }
+    
+    
+    String id;
+    String docname;
+    String newId;
+    String newdocname;
+   
+         
 
+    
+    public prescription(String chno,String dname) {
+        initComponents();
+        this.id = chno;
+        this.docname = dname;
+        newId = id;
+        newdocname = docname;
+        //JOptionPane.showMessageDialog(this, newId);
+       // JOptionPane.showMessageDialog(this, newdocname);
+        channelno.setText(newId);
+        channelno.setEnabled(false);
+            AutoId();     
+    }
+    
+    
+        Connection conn;
+        PreparedStatement pst;
+        ResultSet rs;
+       
+    public void Connect()
+          {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+             
+             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(Channel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+            
+          }
+         private void AutoId(){
+
+        try {
+           Connect();
+            ResultSet rs;
+            Statement s;
+            s = conn.createStatement();
+            rs = s.executeQuery("select MAX(prescriptionid) from prescription");
+            rs.next();
+            rs.getString("MAX(prescriptionid)");
+            if(rs.getString("MAX(prescriptionid)")==null){
+               prescriptionno.setText("PC001");
+            }
+            else
+            {
+                long id = Long.parseLong(rs.getString("MAX(prescriptionid)").substring(2,rs.getString("MAX(prescriptionid)").length()));
+                id++;
+                prescriptionno.setText("IT"+String.format("%03d", id));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(patient.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+            
+            
+           
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -116,6 +194,11 @@ public class prescription extends javax.swing.JFrame {
         jButton1.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jButton1.setForeground(new java.awt.Color(153, 0, 0));
         jButton1.setText("CREATE");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -153,6 +236,41 @@ public class prescription extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+         try {
+            String pno = prescriptionno.getText();
+            String chno = channelno.getText();
+            String destype = deseasetype.getText();
+            String descpt = description.getText();
+            
+            PreparedStatement pst;
+            pst = conn.prepareStatement("insert into prescription(prescriptionid,channelno,doctorname,deseasetype,description)values(?,?,?,?,?)");
+            pst.setString(1, pno);
+            pst.setString(2, chno);
+             pst.setString(3, newdocname );
+            pst.setString(4, destype);
+            pst.setString(5, descpt);
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(this, "prescription added!!!");
+            
+            
+            
+      
+            AutoId();
+          prescriptionno.setText("");
+          channelno.setText("");
+          deseasetype.setText("");
+          description.setText("");
+          prescriptionno.requestFocus(); 
+         
+        } catch (SQLException ex) {
+            Logger.getLogger(patient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

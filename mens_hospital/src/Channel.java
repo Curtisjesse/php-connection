@@ -401,33 +401,7 @@ public class Channel extends javax.swing.JFrame {
         }
         }    
         
-//    
-//         public  void AutoId()
-//         {
-//             try {
-//                    Class.forName("com.mysql.cj.jdbc.Driver");
-//                     Connection conn;
-//                    conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/hospital","root","");
-//                    ResultSet rs;
-//                    Statement s;
-//                    s = conn.createStatement();
-//                    rs = s.executeQuery("select MAX(channelno) from channel");
-//                    rs.next();
-//                    rs.getString("MAX(channelno)");
-//
-//                    if(rs.getString("MAX(channelno)")==null){
-//                        labchannelno.setText("CH001");
-//                    }
-//                    else
-//                    {
-//                        long id = Long.parseLong(rs.getString("MAX(channelno)").substring(2,rs.getString("MAX(channelno)").length()));
-//                        id++;
-//                        labchannelno.setText("CH"+String.format("%03d", id));
-//                    }
-//                } catch (SQLException | ClassNotFoundException ex) {
-//                    Logger.getLogger(Channel.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//    }
+
         public void AutoId(){
         try {
             
